@@ -1,0 +1,87 @@
+<html>
+  <head>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
+  </head>
+  <body>
+    
+  </body>
+  <script type="text/javascript">
+    
+    
+    if (annyang) {
+
+        var sayThis = function(repeat) {
+            console.log('TEST ==>',repeat)
+        }
+
+        // Let's define a command.
+        var commands = {
+            '*repeat': sayThis
+        };
+
+        // Turn on debugging for the console
+        annyang.debug();
+
+        // Initialize annyang with our commands
+        annyang.init(commands);
+
+        // Start listening.
+        // annyang.start();
+        annyang.start({ autoRestart: true, continuous: false });
+
+        //detect input sound
+        annyang.addCallback('soundstart', function() {
+            console.log('sound detected');
+        });
+
+        //detect stop speaking
+        annyang.addCallback('result', function() {
+            console.log('sound stopped');
+        });
+
+        //show result of user speaking
+        annyang.addCallback('result', function(phrases) {
+            console.log("I think the user said: ", phrases[0]);
+            console.log("But then again, it could be any of the following: ", phrases);
+        });
+
+        //capture event result match of user speaking
+        annyang.addCallback('resultMatch', function(userSaid, commandText, phrases) {
+            console.log("User said: ", userSaid); // sample output: 'hello'
+            console.log("command text: ",commandText); // sample output: 'hello (there)'
+            console.log(phrases); // sample output: ['hello', 'halo', 'yellow', 'polo', 'hello kitty']
+        });
+
+        //capture event result no match of user speaking
+        annyang.addCallback('resultNoMatch', function(phrases) {
+            console.log("I think the user said2: ", phrases[0]);
+            console.log("But then again, it could be any of the following2: ", phrases);
+        });
+
+        //capture network error
+        annyang.addCallback('errorNetwork', function() {
+            console.log("Connection error!");
+        });
+
+        //capture permission blocked error
+        annyang.addCallback('errorPermissionBlocked', function() {
+            console.log("Permission Blocked error!");
+        });
+
+        //capture permission denied error
+        annyang.addCallback('errorPermissionDenied', function() {
+            console.log("Permission Denied error!");
+        });
+
+        //capture general error
+        annyang.addCallback('error', function() {
+            console.log("There was an error!");
+        });     
+    }
+
+    if (!annyang) {
+        //browser not supported
+        console.log("Speech Recognition is not supported");
+    }
+  </script>
+</html>
